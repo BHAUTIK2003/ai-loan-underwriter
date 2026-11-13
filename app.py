@@ -1,4 +1,3 @@
-import os
 import streamlit as st
 import pandas as pd
 from pypdf import PdfReader
@@ -10,9 +9,16 @@ st.set_page_config(page_title="AI Loan Underwriter Pro", page_icon="🏦", layou
 # --- Sidebar for API Key Security ---
 with st.sidebar:
     st.header("⚙️ AI Settings")
-    # Check if key is stored in Streamlit Cloud Secrets, else allow manual entry
-    default_key = st.secrets.get("GEMINI_API_KEY", "") if hasattr(st, "secrets") else ""
-    api_key_input = st.text_input("Gemini API Key (Optional)", value=default_key, type="password", help="Enter your Google Gemini API Key for live AI reading. Leave blank to use Built-in Local Engine.")
+    try:
+        default_key = st.secrets.get("GEMINI_API_KEY", "")
+    except Exception:
+        default_key = ""
+    api_key_input = st.text_input(
+        "Gemini API Key (Optional)",
+        value=default_key,
+        type="password",
+        help="Enter your Google Gemini API Key for live AI reading. Leave blank to use Built-in Local Engine."
+    )
     st.info("🔒 **Privacy Note:** No bank statements or personal data are stored on any server.")
 
 st.title("🤖 AI Loan Underwriter Pro (Bank Statement Reader + Advisor)")
